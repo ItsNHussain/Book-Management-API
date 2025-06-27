@@ -1,26 +1,28 @@
-package com.ItsNHussain.Database.domain;
+package com.ItsNHussain.Database.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class Author {
-
+public class AuthorDto {
+	
 	private Long id;
 	
 	private String name;
 	
 	private Integer age;
+
+	protected AuthorDto() {
+	    // Required by JPA
+	}
+
 	
-	public Author(long id, String name, int age) {
+	public AuthorDto(long id, String name, int age) {
 		this.setId(id);
 		this.setName(name);
 		this.setAge(age);
+	}
+	
+	public AuthorDto(String name, int age) {
+	    this.name = name;
+	    this.age = age;
 	}
 
 	public Long getId() {
@@ -55,7 +57,7 @@ public class Author {
 		if (other == null || getClass() != other.getClass()) {
 			return false;
 		}
-		Author author = (Author) other;
+		AuthorDto author = (AuthorDto) other;
 		return id != null && id.equals(author.id);
 	}
 	
@@ -66,5 +68,5 @@ public class Author {
 	}
 	
 
-	
+
 }

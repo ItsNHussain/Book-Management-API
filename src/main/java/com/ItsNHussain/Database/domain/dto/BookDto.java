@@ -1,24 +1,20 @@
-package com.ItsNHussain.Database.domain;
+package com.ItsNHussain.Database.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class Book {
+public class BookDto {
 	
 	private String isbn;
-	private String title;
-	private Long authorId;
 	
-	public Book(String isbn, String title, long authorId) {
+	private String title;
+	
+	private AuthorDto author;
+	
+	public BookDto() {}
+	
+	public BookDto(String isbn, String title, AuthorDto author) {
 		this.setIsbn(isbn);
 		this.setTitle(title);
-		this.setAuthorId(authorId);
+		this.setAuthor(author);
 		
 	}
 
@@ -38,12 +34,12 @@ public class Book {
 		this.title = title;
 	}
 
-	public Long getAuthorId() {
-		return authorId;
+	public AuthorDto getAuthor() {
+		return author;
 	}
 
-	public void setAuthorId(Long authorId) {
-		this.authorId = authorId;
+	public void setAuthor(AuthorDto author) {
+		this.author = author;
 	}
 	
 	@Override
@@ -55,7 +51,7 @@ public class Book {
 			return false;
 		}
 		
-		Book book = (Book) other;
+		BookDto book = (BookDto) other;
 		return this.isbn == book.isbn;
 		
 	}
@@ -64,5 +60,6 @@ public class Book {
 	public int hashCode() {
 		return isbn.hashCode();
 	}
+
 
 }

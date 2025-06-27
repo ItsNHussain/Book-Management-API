@@ -1,4 +1,4 @@
-package com.ItsNHussain.Database.dao;
+package com.ItsNHussain.Database.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,50 +12,49 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.ItsNHussain.Database.dao.impl.AuthorDaoImpl;
-import com.ItsNHussain.Database.domain.Author;
+import com.ItsNHussain.Database.domain.AuthorEntity;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class AuthorDaoImplIntegrationTests {
+public class AuthorRepositoryIntegrationTests {
 	
-	private AuthorDaoImpl underTest;
+	private AuthorRepository underTest;
 	
 	@Autowired
-	public AuthorDaoImplIntegrationTests (AuthorDaoImpl underTest) {
+	public AuthorRepositoryIntegrationTests (AuthorRepository underTest) {
 		this.underTest = underTest;
 	}
 	
 	@Test
 	public void testThatAuthorCanBeCreatedAndRecalled() {
-		Author author = new Author(1L,"Bob Marley",43);
-		underTest.create(author);
-		Optional<Author> result = underTest.findOne(author.getId());
+		AuthorEntity author = new AuthorEntity("Bob Marley",43);
+		underTest.save(author);
+		Optional<AuthorEntity> result = underTest.findById(author.getId());
 		assertThat(result).isPresent();
 		assertThat(result.get()).isEqualTo(author);
 	}
 	
 	@Test
 	public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
-		Author authorA = new Author(1L,"Bob Marley",43);
-		underTest.create(authorA);
-		Author authorB = new Author(100L,"Jacob Marley",49);
-		underTest.create(authorB);
-		Author authorC = new Author(150L,"Sarah Marley",35);
-		underTest.create(authorC);
-		List<Author> result = underTest.find();
+		AuthorEntity authorA = new AuthorEntity("Bob Marley",43);
+		underTest.save(authorA);
+		AuthorEntity authorB = new AuthorEntity("Jacob Marley",49);
+		underTest.save(authorB);
+		AuthorEntity authorC = new AuthorEntity("Sarah Marley",35);
+		underTest.save(authorC);
+		Iterable <AuthorEntity> result = underTest.findAll();
 		assertThat(result).hasSize(3) .containsExactly(authorA,authorB,authorC);
 	}
 	
 	@Test
 	public void testThatAuthorCanBeUpdated() {
-		Author authorA = new Author(1L,"Bob Marley",43);
-		underTest.create(authorA);
+		AuthorEntity authorA = new AuthorEntity("Bob Marley",43);
+		underTest.save(authorA);
 		authorA.setName("Harry Potter");
-		underTest.update(authorA.getId(), authorA);
+		underTest.save(authorA);
 		
-		Optional<Author> result = underTest.findOne(authorA.getId());
+		Optional<AuthorEntity> result = underTest.findById (authorA.getId());
 		assertThat(result).isPresent();
 		assertThat(result.get()).isEqualTo(authorA);
 		
@@ -63,10 +62,10 @@ public class AuthorDaoImplIntegrationTests {
 	
 	@Test
 	public void testThatAuthorCanBeDeleted() {
-		Author authorA = new Author(1L,"Bob Marley",43);
-		underTest.create(authorA);
-		underTest.delete(1L);
-		Optional<Author> result = underTest.findOne(1L);
+		AuthorEntity authorA = new AuthorEntity("Bob Marley",43);
+		underTest.save(authorA);
+		underTest.deleteById(authorA.getId());
+		Optional<AuthorEntity> result = underTest.findById(authorA.getId());
 		assertThat(result).isEmpty();
 	}
 	
